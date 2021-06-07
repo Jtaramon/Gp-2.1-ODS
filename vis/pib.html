@@ -1,0 +1,126 @@
+        <!DOCTYPE html>
+        <head>
+            <meta charset="utf-8">
+            <title>Highcharts data from JSON Response</title>
+            <title>Visualización de datos</title>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+                <link rel="stylesheet" href="../assets/css/main.css" />
+                <style>
+                body{
+                    margin-top: 30px;
+                    margin-left:40px;
+                    #container, #sliders {
+            min-width: 310px; 
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #container {
+            height: 400px; 
+        }
+                }
+                </style>
+                <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+                <script src="https://code.highcharts.com/highcharts.js"></script>
+                <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+                <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+        <div id="container"></div>
+        <div id="sliders">
+            <table>
+                <tr>
+                    <td>Alpha Angle</td>
+                    <td><input id="alpha" type="range" min="0" max="45" value="15"/> <span id="alpha-value" class="value"></span></td>
+                </tr>
+                <tr>
+                    <td>Beta Angle</td>
+                    <td><input id="beta" type="range" min="-45" max="45" value="15"/> <span id="beta-value" class="value"></span></td>
+                </tr>
+                <tr>
+                    <td>Depth</td>
+                    <td><input id="depth" type="range" min="20" max="100" value="50"/> <span id="depth-value" class="value"></span></td>
+                </tr>
+            </table>
+        </div>
+            <script type="text/javascript">
+                $(function () {
+                        var processed_json = new Array(); 
+                        var processed_jsons = new Array();   
+                        $.getJSON('json/pib.json', function(data) {
+                            // Populate series
+                            for (i = 1; i < data.length; i++){
+                                processed_json.push([data[i].CountryName, data[i].cinco]);
+                                processed_jsons.push([data[i].CountryName,data[i].seis]);
+                            }
+                         
+                            // Set up the chart
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                type: 'column',
+                options3d: {
+                    enabled: true,
+                    alpha: 15,
+                    beta: 15,
+                    depth: 50,
+                    viewDistance: 25
+                }
+            },
+            title: {
+                text: 'Chart rotation demo'
+            },
+            subtitle: {
+                text: 'Test options by dragging the sliders below'
+            },
+            plotOptions: {
+                column: {
+                    depth: 25
+                }
+            },series: [{
+                                name: 'Año 2015',
+                                data: processed_json 
+                               
+                            },{name: 'Año 2016',
+                                data: processed_jsons},]
+        });
+
+        function showValues() {
+            $('#alpha-value').html(chart.options.chart.options3d.alpha);
+            $('#beta-value').html(chart.options.chart.options3d.beta);
+            $('#depth-value').html(chart.options.chart.options3d.depth);
+        }
+
+        // Activate the sliders
+        $('#sliders input').on('input change', function () {
+            chart.options.chart.options3d[this.id] = parseFloat(this.value);
+            showValues();
+            chart.redraw(false);
+        });
+
+
+                    });
+                });
+            </script>
+
+
+        </head>
+        <body>
+            <header id="header">
+                        <h1>Datos Latinoamerica</h1>
+                        <nav>
+                            <ul>
+                                <li><a href="../index.html">Inicio</a></li>
+                                <li><a href="visualizacion.html">Poblacion</a></li>
+                                <li><a href="desempleo.html">Desempleo</a></li>
+                                <li><a href="pib.html">Pib</a></li>
+
+                            </ul>
+                        </nav>
+                    </header>
+            <div id="container" style="height: 700px"></div>
+
+
+            
+        </body>
+        </html>

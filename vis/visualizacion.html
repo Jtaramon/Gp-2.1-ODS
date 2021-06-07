@@ -1,0 +1,77 @@
+     <!DOCTYPE html>
+     <head>
+         <meta charset="utf-8">
+         <title>Highcharts data from JSON Response</title>
+         <title>Visualización de datos</title>
+         <meta charset="utf-8" />
+         <meta name="viewport" content="width=device-width, initial-scale=1" />
+         <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+         <link rel="stylesheet" href="../assets/css/main.css" />
+         <style>
+         body{
+            margin-top: 30px;
+            margin-left:40px;
+       }
+  </style>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>      
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  <script type="text/javascript">
+   $(function () {
+      var processed_json = new Array(); 
+      var processed_jsons = new Array();   
+      $.getJSON('json/poblacion.json', function(data) {
+                         // Populate series
+                         for (i = 1; i < data.length; i++){
+                             processed_json.push([data[i].CountryName, data[i].cinco]);
+                             processed_jsons.push([data[i].CountryName,data[i].seis]);
+                        }
+                        
+                         // draw chart
+                         $('#container').highcharts({
+                              chart: {
+                                  type: "column"
+                             },
+                             title: {
+                                  text: "Indicadores del desarrollo mundial"
+                             },
+                             xAxis: {
+                                  type: 'category',
+                                  allowDecimals: false,
+                                  title: {
+                                      text: ""
+                                 }
+                            },
+                            yAxis: {
+                             title: {
+                                 text: "POBLACION"
+                            }
+                       },
+                       series: [
+                       {name: 'Año 2015',
+                       data: processed_json},
+                       {name: 'Año 2016',
+                       data: processed_jsons}],colors: ['red', 'blue']
+                  }); 
+                    });
+ });
+</script>
+
+
+</head>
+<body>
+    <header id="header">
+      <h1>Datos Latinoamerica</h1>
+      <nav>
+          <ul>
+              <li><a href="../index.html">Inicio</a></li>
+              <li><a href="visualizacion.html">Poblacion</a></li>
+              <li><a href="desempleo.html">Desempleo</a></li>
+              <li><a href="pib.html">Pib</a></li>
+
+         </ul>
+    </nav>
+</header>
+<div id="container" style="height: 700px"></div>
+
+</body>
+</html>
